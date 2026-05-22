@@ -171,7 +171,7 @@ export default function Home() {
       </section>
 
       {/* Contact */}
-      <section id="contact" className="px-6 py-24 max-w-2xl mx-auto border-t border-foreground/10">
+      <section id="contact" className="px-6 py-24 max-w-2xl mx-auto border-t border-foreground/10 text-center">
         <h2 className="font-serif text-3xl md:text-4xl mb-4">Let&apos;s talk.</h2>
         <p className="text-lg text-foreground/70 mb-10">
           Free 30-minute call. We look at what&apos;s eating your time and whether
