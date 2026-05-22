@@ -31,7 +31,7 @@ const styles = `
 
   /* hero */
   .fn-hero{padding:80px 64px 100px;position:relative}
-  .fn-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:60px;align-items:stretch}
+  .fn-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:48px;align-items:stretch;max-width:1100px;margin:0 auto}
   .fn-hero-title{font-family:${FN.serif};font-size:116px;line-height:0.96;letter-spacing:-0.035em;margin:0;color:${FN.ink};font-weight:400}
   .fn-hero-title .swap{display:inline-block;position:relative;color:${FN.terra};font-style:italic;min-width:1ch}
   .fn-hero-title .swap-rotor{display:inline-grid;grid-template-rows:1fr;height:1em;overflow:hidden;vertical-align:baseline}
@@ -96,7 +96,7 @@ const styles = `
 
   /* about */
   .fn-about{padding:120px 64px;background:${FN.paper};border-top:1px solid ${FN.rule};border-bottom:1px solid ${FN.rule}}
-  .fn-about-grid{display:grid;grid-template-columns:480px 1fr;gap:80px;align-items:center}
+  .fn-about-grid{display:grid;grid-template-columns:480px 1fr;gap:80px;align-items:center;max-width:1060px;margin:0 auto}
   .fn-about-photo{position:relative}
   .fn-about-photo img{width:100%;height:560px;object-fit:cover;display:block;filter:saturate(.92) sepia(.04) brightness(1.01);object-position:50% 22%}
   .fn-about-tagline{margin-top:28px;display:flex;align-items:baseline;justify-content:center;gap:14px;font-family:${FN.serif};font-style:italic;font-size:24px;color:${FN.sageDeep};letter-spacing:-0.005em}
