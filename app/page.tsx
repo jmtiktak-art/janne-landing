@@ -186,8 +186,12 @@ export default function Home() {
           Schedule a free call →
         </a>
 
-        {/* Social links */}
-        <div className="border-t border-foreground/10 mt-16 pt-8 flex items-center gap-5">
+      </section>
+
+      {/* Footer */}
+      <footer className="px-6 py-10 max-w-5xl mx-auto border-t border-foreground/10 flex items-center justify-between">
+        <span className="text-accent font-medium">🌱 Janne</span>
+        <div className="flex items-center gap-5">
           <a
             href={LINKEDIN_URL}
             target="_blank"
@@ -210,12 +214,6 @@ export default function Home() {
             {EMAIL}
           </a>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="px-6 py-10 max-w-5xl mx-auto border-t border-foreground/10 flex items-center justify-between">
-        <span className="text-accent font-medium">🌱 Janne</span>
-        <p className="text-sm text-foreground/40">{EMAIL}</p>
       </footer>
     </main>
   );
