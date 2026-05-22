@@ -143,7 +143,8 @@ export default function Home() {
               src="/janne.jpg"
               alt="Janne"
               fill
-              className="object-cover object-top"
+              className="object-cover"
+              style={{ objectPosition: "center 30%" }}
             />
           </div>
 
