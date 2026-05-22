@@ -111,7 +111,7 @@ export default function Home() {
         <div className="bg-accent/10 rounded-3xl px-10 py-14 md:px-16 text-center">
           <p className="font-serif text-3xl md:text-4xl mb-4">The guarantee.</p>
           <p className="text-lg text-foreground/70 max-w-lg mx-auto">
-            Your evenings back by step 3 — or get your money back. No fine print.
+            Your evenings back in 1 month — or get your money back. No fine print.
           </p>
         </div>
       </section>
