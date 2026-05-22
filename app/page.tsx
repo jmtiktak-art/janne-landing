@@ -4,8 +4,7 @@ import { Timeline } from "./components/Timeline";
 const BOOKING_URL =
   "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ1Me4I9T7NBe9xr8snXg2RgEj5tbbXRpPhKxMD7ztKvSgZVSUD6E2kaH8CWZFDnYOEAc2Bc-TiQ";
 
-// TODO: Update with your actual LinkedIn URL
-const LINKEDIN_URL = "https://linkedin.com/in/jannetiktak";
+const LINKEDIN_URL = "https://www.linkedin.com/in/janne-t-64698013b";
 const EMAIL = "jmtiktak@gmail.com";
 
 const testimonials = [
@@ -187,7 +186,7 @@ export default function Home() {
         </a>
 
         {/* Social links */}
-        <div className="flex items-center gap-5 mt-10">
+        <div className="border-t border-foreground/10 mt-16 pt-8 flex items-center gap-5">
           <a
             href={LINKEDIN_URL}
             target="_blank"
