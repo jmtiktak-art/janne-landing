@@ -550,12 +550,11 @@
     const profile = total >= 9 ? 'A' : total >= 5 ? 'B' : 'C';
 
     if (SHEET_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
-      fetch(SHEET_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ name, email, q5, profile, score: total,
-          q1: answers[0], q2: answers[1], q3: answers[2], q4: answers[3],
-          timestamp: new Date().toISOString() })
+      const payload = JSON.stringify({ name, email, q5, profile, score: total,
+        q1: answers[0], q2: answers[1], q3: answers[2], q4: answers[3],
+        timestamp: new Date().toISOString() });
+      fetch(SHEET_URL + '?data=' + encodeURIComponent(payload), {
+        method: 'GET', mode: 'no-cors'
       }).catch(() => {});
     }
 
