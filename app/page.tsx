@@ -127,6 +127,17 @@ const styles = `
   .fn-footer{padding:48px 64px;border-top:1px solid ${FN.rule};display:flex;justify-content:space-between;align-items:center;font-family:${FN.mono};font-size:10.5px;color:${FN.inkSoft};letter-spacing:0.08em;text-transform:uppercase}
   .fn-footer a{color:${FN.ink};text-decoration:none;border-bottom:1px solid ${FN.rule}}
 
+
+  /* quiz banner */
+  .fn-quiz-banner{padding:80px 64px;background:${FN.paper};border-top:1px solid ${FN.rule};border-bottom:1px solid ${FN.rule};text-align:center}
+  .fn-quiz-banner-label{font-family:${FN.mono};font-size:10.5px;color:${FN.sage};letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px}
+  .fn-quiz-banner h2{font-family:${FN.serif};font-size:52px;line-height:1.1;letter-spacing:-0.02em;margin:0 0 32px;color:${FN.ink};font-weight:400;max-width:700px;margin-left:auto;margin-right:auto}
+  .fn-quiz-banner h2 em{font-style:italic;color:${FN.terra}}
+  .fn-quiz-banner-cta{display:inline-flex;align-items:center;gap:12px;padding:16px 28px;background:${FN.ink};color:${FN.paper};text-decoration:none;border-radius:999px;font-family:${FN.sans};font-size:14px;font-weight:500;transition:transform .2s,background .2s}
+  .fn-quiz-banner-cta:hover{transform:translateY(-2px);background:${FN.terra}}
+  .fn-hero-quiz-link{display:block;margin-top:14px;font-family:${FN.serif};font-style:italic;font-size:17px;color:${FN.inkSoft};text-decoration:none;border-bottom:1px solid ${FN.rule};padding-bottom:2px;width:fit-content;transition:color .2s,border-color .2s}
+  .fn-hero-quiz-link:hover{color:${FN.terra};border-color:${FN.terra}}
+
   /* responsive */
   @media (max-width: 900px) {
     .fn-nav{padding:20px 24px}
@@ -161,6 +172,8 @@ const styles = `
     .fn-contact h2{font-size:96px}
     .fn-contact-sub{font-size:20px}
     .fn-footer{padding:32px 24px;flex-direction:column;gap:16px;text-align:center}
+    .fn-quiz-banner{padding:56px 24px}
+    .fn-quiz-banner h2{font-size:32px}
   }
 `;
 
@@ -213,6 +226,9 @@ export default function Page() {
             <a href="#contact" className="fn-hero-cta">
               Book a free call <span className="arrow">→</span>
             </a>
+            <a href="/quiz" className="fn-hero-quiz-link">
+              Not sure yet? Find your bottleneck first →
+            </a>
           </div>
 
           <div className="fn-hero-photo">
@@ -238,6 +254,16 @@ export default function Page() {
             </blockquote>
           </div>
         </div>
+      </section>
+
+
+      {/* quiz banner */}
+      <section className="fn-quiz-banner">
+        <p className="fn-quiz-banner-label">2-minute quiz</p>
+        <h2>Not sure where your time<br />is going? Find out — <em>right now.</em></h2>
+        <a href="/quiz" className="fn-quiz-banner-cta">
+          Take the quiz →
+        </a>
       </section>
 
       {/* steps */}
