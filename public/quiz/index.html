@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What's eating your time? — Janne Tiktak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:      #faf7f2;
+      --fg:      #2a2a2a;
+      --accent:  #7b9971;
+      --muted:   #888;
+      --border:  #e8e3db;
+      --white:   #ffffff;
+      --radius:  10px;
+      --font:    'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif:   'Instrument Serif', Georgia, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    header {
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--font);
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--fg); }
+
+    /* ── Main ──────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 64px 24px 80px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* ── Progress bar ──────────────────────────────────────── */
+    .progress {
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-bottom: 56px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* ── Steps ─────────────────────────────────────────────── */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* ── Step label ────────────────────────────────────────── */
+    .step-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 4px 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ── Headings ──────────────────────────────────────────── */
+    h1 {
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      margin-bottom: 10px;
+    }
+
+    h1 em {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      line-height: 1.55;
+    }
+
+    /* ── Answer options ────────────────────────────────────── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 15px;
+      font-family: var(--font);
+      line-height: 1.35;
+      text-align: left;
+      background: var(--white);
+      color: var(--fg);
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      width: 100%;
+    }
+
+    .option:hover {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, var(--white));
+    }
+
+    .option.selected {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .option-emoji {
+      font-size: 18px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ── Open text ─────────────────────────────────────────── */
+    textarea {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--fg);
+      background: var(--white);
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.55;
+    }
+    textarea:focus { outline: none; border-color: var(--accent); }
+    textarea::placeholder { color: #bbb; }
+
+    /* ── Capture form ──────────────────────────────────────── */
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+    .field-label:first-of-type { margin-top: 0; }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--fg);
+      background: var(--white);
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+
+    /* ── Buttons ───────────────────────────────────────────── */
+    .btn {
+      display: inline-block;
+      background: var(--fg);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      padding: 14px 28px;
+      font-size: 15px;
+      font-family: var(--font);
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 28px;
+      letter-spacing: -0.01em;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.8; }
+
+    .btn-accent {
+      background: var(--accent);
+    }
+
+    /* ── Intro ─────────────────────────────────────────────── */
+    .intro-accent {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--accent);
+      font-size: 1.05em;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 36px 0;
+    }
+
+    /* ── Result ────────────────────────────────────────────── */
+    .result-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .result-score {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .result-section {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-section-label {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .result-section p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--fg);
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .tip-number {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+      line-height: 1.4;
+      width: 20px;
+    }
+
+    .tip-content h4 {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .tip-content p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── CTA box ───────────────────────────────────────────── */
+    .cta-box {
+      margin-top: 36px;
+      padding: 32px;
+      background: var(--fg);
+      color: var(--white);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .cta-box .cta-fleuron {
+      font-size: 20px;
+      opacity: 0.4;
+      margin-bottom: 12px;
+    }
+
+    .cta-box p {
+      font-size: 15px;
+      line-height: 1.65;
+      opacity: 0.88;
+      margin-bottom: 24px;
+    }
+
+    .cta-box p em {
+      font-family: var(--serif);
+      font-style: italic;
+      opacity: 1;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 14px 28px;
+      font-size: 15px;
+      font-family: var(--font);
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      letter-spacing: -0.01em;
+    }
+    .cta-btn:hover { opacity: 0.85; }
+
+    .fine-print {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      margin-top: 20px;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--fg); }
+
+    /* ── Mobile ────────────────────────────────────────────── */
+    @media (max-width: 500px) {
+      header { padding: 16px 20px; }
+      main { padding: 40px 16px 60px; }
+      .cta-box { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="https://jannetiktak.com" class="logo">Janne Tiktak</a>
+  <a href="https://jannetiktak.com" class="back-link">← Back</a>
+</header>
+
+<main>
+  <div class="card">
+
+    <div class="progress" id="progress" style="display:none">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <!-- ── Intro ────────────────────────────────────────── -->
+    <div class="step active" id="step-0">
+      <span class="tag">2-minute quiz</span>
+      <h1>What's eating your <em>time?</em></h1>
+      <p class="subtitle">Find out in five quick questions — and get easy solutions you can use straight away.</p>
+      <button class="btn btn-accent" style="margin-top:32px;" onclick="startQuiz()">Let's find out →</button>
+    </div>
+
+    <!-- ── Q1 ──────────────────────────────────────────── -->
+    <div class="step" id="step-1">
+      <p class="step-label">Question 1 of 5</p>
+      <h1>⏰ How many hours a week disappear into things that shouldn't need you?</h1>
+      <p class="subtitle">Emails, follow-ups, scheduling, admin — you know the ones.</p>
+      <div class="options" id="options-1">
+        <button class="option" onclick="pick(1, 0, this)"><span class="option-emoji">✅</span> Under 2 hours</button>
+        <button class="option" onclick="pick(1, 1, this)"><span class="option-emoji">🌊</span> 2–5 hours</button>
+        <button class="option" onclick="pick(1, 2, this)"><span class="option-emoji">😬</span> 5–10 hours</button>
+        <button class="option" onclick="pick(1, 3, this)"><span class="option-emoji">🚨</span> More than 10 hours</button>
+      </div>
+    </div>
+
+    <!-- ── Q2 ──────────────────────────────────────────── -->
+    <div class="step" id="step-2">
+      <p class="step-label">Question 2 of 5</p>
+      <h1>🔥 If you took a full week off right now — what breaks first?</h1>
+      <div class="options" id="options-2">
+        <button class="option" onclick="pick(2, 3, this)"><span class="option-emoji">📩</span> Client communication</button>
+        <button class="option" onclick="pick(2, 2, this)"><span class="option-emoji">📅</span> Bookings & scheduling</button>
+        <button class="option" onclick="pick(2, 2, this)"><span class="option-emoji">📣</span> My social media & content goes quiet</button>
+        <button class="option" onclick="pick(2, 1, this)"><span class="option-emoji">🧾</span> Invoicing & admin</button>
+        <button class="option" onclick="pick(2, 0, this)"><span class="option-emoji">😌</span> Honestly — it'd be fine</button>
+      </div>
+    </div>
+
+    <!-- ── Q3 ──────────────────────────────────────────── -->
+    <div class="step" id="step-3">
+      <p class="step-label">Question 3 of 5</p>
+      <h1>🧠 Where does "what needs to happen this week" actually live?</h1>
+      <div class="options" id="options-3">
+        <button class="option" onclick="pick(3, 3, this)"><span class="option-emoji">💭</span> Mostly in my head</button>
+        <button class="option" onclick="pick(3, 2, this)"><span class="option-emoji">📱</span> WhatsApp + a few notes + a spreadsheet</button>
+        <button class="option" onclick="pick(3, 1, this)"><span class="option-emoji">🗂️</span> I have systems — a bit messy</button>
+        <button class="option" onclick="pick(3, 0, this)"><span class="option-emoji">⚙️</span> Solid systems, mostly humming</button>
+      </div>
+    </div>
+
+    <!-- ── Q4 ──────────────────────────────────────────── -->
+    <div class="step" id="step-4">
+      <p class="step-label">Question 4 of 5</p>
+      <h1>🌿 When did you last take a full day completely off — no emails, no decisions, just headspace?</h1>
+      <div class="options" id="options-4">
+        <button class="option" onclick="pick(4, 0, this)"><span class="option-emoji">🙌</span> This month</button>
+        <button class="option" onclick="pick(4, 1, this)"><span class="option-emoji">🤔</span> A few months ago</button>
+        <button class="option" onclick="pick(4, 2, this)"><span class="option-emoji">😅</span> Can't remember, honestly</button>
+        <button class="option" onclick="pick(4, 3, this)"><span class="option-emoji">😭</span> ...what's a day off</button>
+      </div>
+    </div>
+
+    <!-- ── Q5 ──────────────────────────────────────────── -->
+    <div class="step" id="step-5">
+      <p class="step-label">Question 5 of 5</p>
+      <h1>💬 What's the one thing you keep meaning to sort out — but never get to?</h1>
+      <p class="subtitle">No right answer. Just the thing that's been sitting there.</p>
+      <textarea id="q5" placeholder="e.g. setting up a proper booking system, automating client follow-ups, clearing the email backlog..."></textarea>
+      <br>
+      <button class="btn" onclick="goCapture()">Almost there →</button>
+    </div>
+
+    <!-- ── Capture ─────────────────────────────────────── -->
+    <div class="step" id="step-6">
+      <p class="step-label">Your result</p>
+      <h1>Where should I send it? ✉️</h1>
+      <p class="subtitle">You'll see your result right away — I'll also send a copy to your inbox.</p>
+      <label class="field-label" for="fname">First name</label>
+      <input type="text" id="fname" placeholder="Janne" autocomplete="given-name" />
+      <label class="field-label" for="email">Email</label>
+      <input type="email" id="email" placeholder="you@yourbusiness.com" autocomplete="email" />
+      <button class="btn btn-accent" id="submit-btn" onclick="submit()">Show me my result →</button>
+      <p class="fine-print" style="margin-top:16px;">No spam. Just your result + the occasional useful thing. Unsubscribe any time.</p>
+    </div>
+
+    <!-- ── Result ──────────────────────────────────────── -->
+    <div class="step" id="step-result"></div>
+
+  </div>
+</main>
+
+<footer>
+  <span style="color:var(--accent);">❋</span> &nbsp;
+  <a href="https://jannetiktak.com">jannetiktak.com</a>
+</footer>
+
+<script>
+  // ─── CONFIG — fill these in before going live ──────────────────
+  const SHEET_URL   = 'https://script.google.com/macros/s/AKfycbwYvm-i61nFPpe4AqrCgh9joY-AmqUq6NLXYSgD9SQFnLBvYQ0ZI0GKfJsXjpBhkMJz/exec';
+  const BOOKING_URL = 'https://calendar.app.google/KtmKrvqDt2kZ9EqAA';
+  // ──────────────────────────────────────────────────────────────
+
+  const scores  = [0, 0, 0, 0];
+  const answers = ['', '', '', ''];
+
+  function show(id) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setProgress(n) {
+    document.getElementById('progress-bar').style.width = (n / 5 * 100) + '%';
+  }
+
+  function startQuiz() {
+    document.getElementById('progress').style.display = 'block';
+    setProgress(0);
+    show('step-1');
+  }
+
+  function pick(q, score, el) {
+    document.querySelectorAll(`#options-${q} .option`).forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    scores[q - 1] = score;
+    answers[q - 1] = el.textContent.trim();
+    setTimeout(() => { setProgress(q); show(`step-${q + 1}`); }, 320);
+  }
+
+  function goCapture() {
+    setProgress(5);
+    show('step-6');
+  }
+
+  function submit() {
+    const email = document.getElementById('email').value.trim();
+    const name  = document.getElementById('fname').value.trim();
+    const q5    = document.getElementById('q5').value.trim();
+
+    if (!email) { document.getElementById('email').focus(); return; }
+
+    const total   = scores.reduce((a, b) => a + b, 0);
+    const profile = total >= 9 ? 'A' : total >= 5 ? 'B' : 'C';
+
+    if (SHEET_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+      fetch(SHEET_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ name, email, q5, profile, score: total,
+          q1: answers[0], q2: answers[1], q3: answers[2], q4: answers[3],
+          timestamp: new Date().toISOString() })
+      }).catch(() => {});
+    }
+
+    renderResult(name || 'there', profile);
+  }
+
+  // ─── Profile content ───────────────────────────────────────────
+  const PROFILES = {
+    A: {
+      tag: 'Running on memory',
+      emoji: '🧠',
+      headline: 'Your business runs on you.',
+      overview: "The plans, the follow-ups, the \"I'll remember that\" — it all lives in your head. That works, until it doesn't.",
+      context: "You're clearly not disorganised, or it would've collapsed already. The problem is nothing exists <em>outside</em> of you. Step away and it stops. That's not a you problem — it's a systems problem.",
+      tips: [
+        {
+          title: 'Automate your most common reply',
+          body: "Find the message you send most often — a booking confirmation, an inquiry response, a 'here's what happens next' email. If you use Calendly, Acuity, or Cal.com: they already send this automatically, you just haven't written the text yet. Do that now. For everything else: Gmail's Canned Responses + a filter can auto-reply to any email matching a subject line or sender pattern. Set it up once, it sends itself from then on. You never write that message again."
+        },
+        {
+          title: 'Write one process down',
+          body: "Pick the thing you explain most often — an onboarding step, a recurring client update, how you take a booking. Write it out step by step. It becomes a checklist, a template, or something you can eventually hand off. Start with whatever broke last."
+        },
+        {
+          title: 'Turn on one automation you already have',
+          body: "Most booking tools (Calendly, Acuity, even Google Calendar) have automatic confirmation emails — they're just not turned on. Check yours. If it's there, customise the text and switch it on. Zero setup cost."
+        },
+        {
+          title: 'End-of-week brain dump',
+          body: "Every Friday, 5 minutes: what happened, what's pending, what needs to happen Monday. Paste it into a doc. Next Monday you start from notes instead of from memory. Sounds small — clears a surprising amount of mental load."
+        }
+      ],
+      close: "All of that works. It also takes time you don't have right now — which is the whole problem."
+    },
+    B: {
+      tag: 'Held together with duct tape',
+      emoji: '🔧',
+      headline: "You've built systems. They mostly work.",
+      overview: "But they lean on manual steps, copy-paste, and a few things only you know how to do.",
+      context: "You're past the \"it's all in my head\" stage — good. The drag now is the patchwork: tools that don't talk to each other, steps you redo every time, friction that quietly adds up across a week. You're not far from this running smoothly. You just need to untangle the right things first.",
+      tips: [
+        {
+          title: 'List your copy-paste tasks',
+          body: "Spend 10 minutes listing every step where you copy something from one place to paste it into another. Each one is an automation candidate. Zapier and Make both have free tiers — most of these connect in under an hour. Start with whichever one you repeat most."
+        },
+        {
+          title: 'Map the workflow that annoys you most',
+          body: "Write out every step of the process that creates the most friction — including the manual bits. You'll almost always see immediately what's redundant, what a tool could handle, or what just needs a cleaner trigger. The map is half the fix."
+        },
+        {
+          title: 'Consolidate where leads land',
+          body: "If enquiries come in from multiple places — email, Instagram DMs, a contact form, WhatsApp — pick one place for them to land and route everything there. One inbox, one response rhythm. Stops things slipping through and cuts the mental overhead of checking five places."
+        },
+        {
+          title: 'Batch your admin',
+          body: "Set one dedicated block per week for invoicing, follow-ups, and admin tasks — 60 to 90 minutes, same time each week. Don't do it between other work. Batching means you get into the right headspace once instead of context-switching all week."
+        }
+      ],
+      close: "Doable — if you have time to untangle it. You probably don't, and that's fair."
+    },
+    C: {
+      tag: 'Close — one bottleneck',
+      emoji: '🎯',
+      headline: "You're in good shape.",
+      overview: "Systems are mostly humming. There are just one or two things that still eat more time than they should.",
+      context: "You don't need an overhaul — you need a sharp fix on the specific bottleneck. The trap is leaving it because everything else works \"well enough.\" That one thing tends to compound: it drains more time than you realise, and fixing it usually unlocks more than just the time.",
+      tips: [
+        {
+          title: 'Name it specifically',
+          body: "Write down the one thing that still feels heavier than it should — and get specific. Not \"admin\" but \"chasing late invoices\" or \"rescheduling calls\" or \"manually sending the same update every week.\" The more specific, the easier it is to see what actually fixes it."
+        },
+        {
+          title: 'Time it for one week',
+          body: "Track how long the bottleneck actually takes across a week. Often just measuring it shows you it's worth fixing — and tells you exactly what the fix is worth. A task that \"takes 10 minutes\" is usually 30 minutes with context-switching included."
+        },
+        {
+          title: 'Test the simple fix first',
+          body: "Before building something complex: is there a setting you haven't turned on? A tool you already pay for that does this? A one-sentence policy that removes the friction entirely? Most bottlenecks in a well-run small business have a simpler fix than they look."
+        },
+        {
+          title: 'Ask: does this actually need me?',
+          body: "If the answer is no — if anyone with access to your tools could do it — it can be automated or delegated. If yes, it can probably still be templated so it takes a fraction of the time. Either way, it stops sitting on your plate."
+        }
+      ],
+      close: "You could sort this yourself — the thing you keep deprioritising is exactly the one worth handing off."
+    }
+  };
+
+  function renderResult(firstName, key) {
+    const p = PROFILES[key];
+    const tipsHtml = p.tips.map((t, i) => `
+      <div class="tip-item">
+        <div class="tip-number">${i + 1}</div>
+        <div class="tip-content">
+          <h4>${t.title}</h4>
+          <p>${t.body}</p>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('step-result').innerHTML = `
+      <div class="result-meta">
+        <span class="tag">${p.emoji} ${p.tag}</span>
+      </div>
+
+      <h1>${p.headline}</h1>
+      <p style="font-size:16px;line-height:1.65;margin-top:10px;color:var(--fg);">${p.overview}</p>
+
+      <div class="result-section">
+        <p class="result-section-label">What this means</p>
+        <p>${p.context}</p>
+      </div>
+
+      <div class="result-section">
+        <p class="result-section-label">What you could do ✨</p>
+        ${tipsHtml}
+      </div>
+
+      <div class="cta-box">
+        <div class="cta-fleuron">❋</div>
+        <p>${p.close}<br><br>If you'd rather someone just <em>sort it out for you</em> — that's exactly what I do.</p>
+        <a href="${BOOKING_URL}" target="_blank" rel="noopener" class="cta-btn">Book a free 30-minute call →</a>
+      </div>
+
+    `;
+
+    document.getElementById('progress').style.display = 'none';
+    show('step-result');
+  }
+</script>
+
+</body>
+</html>
